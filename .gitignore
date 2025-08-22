@@ -1,0 +1,20 @@
+# Ignore Python cache and virtual environments
+__pycache__/
+*.pyc
+*.pyo
+*.pyd
+venv/
+.env
+
+# Ignore model weights
+*.h5
+*.hdf5
+*.ckpt
+*.pth
+
+# Ignore training history files
+*.pkl
+
+# Ignore system files
+.DS_Store
+Thumbs.db

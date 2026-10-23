@@ -1,13 +1,34 @@
-This repository implements EnhancedMobileNetV2, a lightweight CNN that augments MobileNetV2 with Channel Attention and an ATTRUS module to improve accuracy while keeping the parameter count and compute cost low. Baseline MobileNetV1/V2, ResNet50, DenseNet121, and VGG16 were trained for comparison.
+# EnhancedMobileNetV2
 
-Architecture (High level)
+A lightweight CNN for plant disease classification. It extends MobileNetV2 with channel attention and ATTRUS refinement blocks, and is benchmarked against five standard architectures.
 
-Backbone: MobileNetV2
+## Architecture
 
-Enhancements:
+- **Backbone:** MobileNetV2, ImageNet weights, two-phase transfer learning: train the new head with the backbone frozen, then fine-tune.
+- **Channel attention:** a squeeze-and-excitation block that re-weights feature channels to emphasise informative responses.
+- **ATTRUS block:** a residual channel-reweighting block (`x + x * attention(x)`) that sharpens discriminative features without discarding the original signal.
 
-Channel Attention: re-weights feature channels to emphasize informative responses.
+## Dataset
 
-ATTRUS module: lightweight refinement block to suppress redundant features and enhance discriminative ones.
+38 classes of healthy and diseased crop leaves: 70,295 training images and 17,572 held-out validation images.
 
-Goal: better accuracy–vs–compute trade-off than plain MobileNetV2.
+## Results
+
+Evaluated on the 17,572 held-out images.
+
+| Model | Accuracy | F1 | Saved model size |
+| --- | --- | --- | --- |
+| ResNet50 | 98.82% | 0.988 | 98 MB |
+| **EnhancedMobileNetV2 (ours)** | **98.54%** | **0.985** | **39 MB** |
+| DenseNet121 | 97.77% | 0.978 | 31 MB |
+| MobileNetV1 | 97.66% | 0.977 | 15 MB |
+| VGG16 | 96.84% | 0.968 | 60 MB |
+| MobileNetV2 | 96.23% | 0.963 | 11 MB |
+
+The attention and ATTRUS additions improve plain MobileNetV2 by 2.3 points. The model comes within 0.3 points of ResNet50 at 40% of its saved size.
+
+Training curves, confusion matrices and ROC curves are in `results/`.
+
+## Stack
+
+Python · TensorFlow / Keras · NumPy · scikit-learn · Matplotlib
